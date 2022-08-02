@@ -36,7 +36,7 @@ SELECT mem_name, height, mem_number FROM members WHERE height >= 165 OR mem_numb
 SELECT mem_name, height FROM members WHERE height >=163 AND height <= 165;
 SELECT mem_name, height FROM members WHERE height BETWEEN 163 AND 165;
 SELECT mem_name, addr FROM members WHERE addr = '경기' OR addr = '전남' OR addr = '경남';
-SELECT mem_name, addr FROM members WHERE addr IN ('경기', '전남', '경남');
+SELECT mem_name, addr FROM members WHERE addr IN ('경기', '전남', '경남');	
 SELECT * FROM members WHERE mem_name LIKE '우%';
 SELECT * FROM members WHERE mem_name LIKE '__핑크';
 SELECT height FROM members WHERE mem_name = '에이핑크';
@@ -47,3 +47,22 @@ SELECT mem_name, height FROM members
 SELECT mem_id, mem_name, debut_date FROM members ORDER BY debut_date;
 SELECT mem_id, mem_name, debut_date, height FROM members WHERE height >= 164 ORDER BY height DESC;
 SELECT mem_id, mem_name, debut_date, height FROM members WHERE height >= 164 ORDER BY height DESC, debut_date ASC;
+
+USE market_db;
+SET @myVar1 = 5;
+SET @myVar2 = 4.25;
+
+SELECT @myVar1;
+SELECT @myVar1 + @myVar2 ;
+
+SET @txt = '가수 이름==> ' ;
+SET @height = 166;
+SELECT @txt , mem_name FROM members WHERE height > @height ;
+
+SELECT AVG(price) AS '평균 가격' FROM buy;
+
+SELECT CAST(AVG(price) AS SIGNED) '평균 가격' FROM buy;
+SELECT CONVERT(AVG(price) , SIGNED) '평균 가격' FROM buy;
+
+select cast('2022$12$12' as date);
+select cast('2022/12/12' as date);
