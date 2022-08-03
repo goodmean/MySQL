@@ -112,10 +112,71 @@ select name, height from usertbl
 			or height = (select min(height) from usertbl); -- 가장 큰키와 가장 작은키의 회원이름과 키를 출력
 select count(*) from usertbl;
 select count(mobile1) '휴대폰이 있는 사용자' from usertbl; -- 카운트
-
 SELECT userID '사용자 아이디', SUM(price*amount) '총 구매액'
 	FROM buytbl GROUP BY userID;
 SELECT userID '사용자 아이디', SUM(price*amount) '총 구매액'
 	FROM buytbl GROUP BY userID
     having sum(price*amount) >= 1000 -- 집계 함수를 쓰는 조건절은 HAVING 사용, GROUP BY 다음으로 위치
     order by sum(price*amount);
+    
+-- 데이터의 변경을 위한 SQL문
+
+use sqldb;
+create table testTb1 (id int, userName char(3), age int);
+insert into testTb1 values (1, '홍길동', 25);
+insert into testTb1(id, userName) values (2, '설현');
+insert into testTb1(userName, age, id) values ('하니', 26, 3);
+
+create table testTb2(
+	id int AUTO_INCREMENT primary key, -- 자동으로 1부터 증가하는 값을 입력
+    userName char(3),
+    age int
+);
+insert into testTb2 values (null, '지민', 25);
+insert into testTb2 values (null, '유나', 22);
+insert into testTb2 values (null, '유경', 21);
+select * from testTb2;
+
+alter TABLE testTb2 auto_increment=100; -- 100부터 입력
+insert into testTb2 values (null, '찬미', 23);
+select * from testTb2;
+
+use sqldb;
+create table testTb3(
+	id int auto_increment primary key,
+    userName char(3),
+    age int
+);
+alter table testTb3 AUTO_INCREMENT=1000;
+set @@auto_increment_increment=3; -- 증가값 지정
+insert into testTb3 values (null, '나연', 20);
+insert into testTb3 values (null, '정연', 18);
+insert into testTb3 values (null, '모모', 19);
+select * from testTb3;
+
+create table testTb4 (
+	id int,
+    Fname varchar(50),
+    Lname varchar(50)
+);
+insert into testTb4
+	select emp_no, first_name, last_name
+		from employees.employees; -- 대량의 샘플 데이터 생성
+create table testTb5
+	(SELECT emp_no, first_name, last_name from employees.employees); -- 테이블 정의 생략
+SELECT * from testTb5;
+    
+update testTb4
+	set Lname = '없음'
+    where Fname = 'Kyoichi';
+update buytbl set price = price * 1.5;
+
+delete from testTb4 where Fname = 'Aamer' Limit 5;
+
+create table bigTb1 (select * from employees.employees);
+create table bigTb2 (select * from employees.employees);
+create table bigTb3 (select * from employees.employees);
+delete from bigTb1; -- 1.250 sec
+drop table bigTb2; -- 0.47 sec
+truncate table bigTb3; -- 0.031 sec
+
