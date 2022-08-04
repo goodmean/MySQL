@@ -1,4 +1,4 @@
-USE market_db;
+SE market_db;
 
 SELECT * FROM buy -- 첫 번째 테이블
 	INNER JOIN members -- 두 번째 테이블
