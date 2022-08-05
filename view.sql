@@ -54,6 +54,83 @@ as
 	select * from members where height >= 167;
 select * from v_height167;
 
+USE sqldb;
+create view v_usertbl
+as
+	select userid, name, addr from usertbl;
+    
+select * from v_usertbl;
+
+select U.userid, U.name, B.prodName, U.addr, concat(U.mobile1, U.mobile2) as '연락처'
+from usertbl U
+	join buytbl B
+		on U.userid = B.userid;
+        
+create view v_userbuytbl
+as
+	select U.userid, U.name, B.prodName, U.addr, Concat(U.mobile1, U.mobile2) as '연락처'
+    from usertbl U
+		join buytbl B
+			on U.userid = B.userid;
+            
+select * from v_userbuytbl where name = '김범수';
+
+use sqldb;
+drop view if exists v_userbuytbl;
+create view v_userbuytbl
+as
+	select U.userid as 'USER ID', U.name as 'USER NAME', B.prodName as 'PRODUCT NAME', U.addr, concat(U.mobile1, U.mobile2) as 'MOBILE PHONE'
+	from usertbl U
+		join buytbl B
+			on U.userid = B.userid;
+            
+select `user id`, `user name` from v_userbuytbl;
+
+use sqldb;
+create or replace view v_usertbl
+as
+	select userid, name, addr from usertbl;
+    
+desc v_usertbl;
+desc usertbl; -- 이건 describe 정렬은 descend
+
+show create view v_usertbl;
+
+update v_usertbl set addr = '부산' where userid='JKW';
+
+insert into v_usertbl(userid, name, addr) values('KBM', '김병만', '충북');
+
+create view v_sum
+as
+	select userid as 'userid', sum(price*amount) as 'total'
+		from buytbl group by userid;
+	
+select * from v_sum;
+
+select * from information_schema.views
+	where table_schema = 'sqldb' and table_name = 'v_sum';
+    
+create view v_height177
+as
+	select * from usertbl where height >= 177;
+    
+select * from v_height177;
+
+delete from v_height177 where height < 177;
+
+insert into v_height177 values('KBM', '김병만', 1977, '경기', '010', '5555555', 158, '2023-01-01');
+
+ALTER view v_height177
+as
+	select * from usertbl where height >= 177
+		with check option;
+        
+insert into v_height177 values('SJH', '서장훈', 2006, '서울', '010', '3333333', 155, '2023-03-03');
+
+DROP TABLE IF EXISTS BUYTBL, USERTBL;
+SELECT * FROM V_USERBUYTBL;
+
+CHECK TABLE V_USERBUYTBL;
 
 
 
