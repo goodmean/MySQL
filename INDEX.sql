@@ -1,49 +1,49 @@
-use market_db;
-select * from members;
-show index from members;
-show table status like 'members';
+USE market_db;
+SELECT * FROM members;
+SHOW INDEX FROM members;
+SHOW TABLE STATUS LIKE 'members';
 
-create index idx_member_addr
-	on members (addr);
+CREATE INDEX idx_member_addr
+	ON members (addr);
     
-analyze table members;
+ANALYZE TABLE members;
 
-create unique index idx_member_mem_name
-	on members (mem_name);
+CREATE UNIQUE INDEX idx_member_mem_name
+	ON members (mem_name);
     
-select mem_id, mem_name, addr from members;
+SELECT mem_id, mem_name, addr FROM members;
 
-select mem_id, mem_name, addr from members where mem_name = '에이핑크';
+SELECT mem_id, mem_name, addr FROM members WHERE mem_name = '에이핑크';
 
-create index idx_member_mem_number
-	on members (mem_number);
-analyze table members;
+CREATE INDEX idx_member_mem_number
+	ON members (mem_number);
+ANALYZE TABLE members;
 
-select mem_name, mem_number
-	from members
-	where mem_number >= 7;
+SELECT mem_name, mem_number
+	FROM members
+	WHERE mem_number >= 7;
     
-select mem_name, mem_number
-	from members
-	where mem_number >= 1;
+SELECT mem_name, mem_number
+	FROM members
+	WHERE mem_number >= 1;
     
-select mem_name, mem_number
-	from members
-	where mem_number*2 >= 14;
+SELECT mem_name, mem_number
+	FROM members
+	WHERE mem_number*2 >= 14;
     
-select mem_name, mem_number
-	from members
-	where mem_number >= 14/2;
+SELECT mem_name, mem_number
+	FROM members
+	WHERE mem_number >= 14/2;
     
-show index from members;
+SHOW INDEX FROM members;
 
-drop index idx_member_mem_name on members;
-drop index idx_member_addr on members;
-drop index idx_member_mem_number on members;
+DROP INDEX idx_member_mem_name ON members;
+DROP INDEX idx_member_addr ON members;
+DROP INDEX idx_member_mem_number ON members;
 
-select table_name, constraint_name
-	from information_schema.referential_constraints
-    where constraint_schema = 'market_db';
+SELECT table_name, constraint_name
+	FROM information_schema.referential_constraints
+    WHERE constraint_schema = 'market_db';
     
-alter table members
-	drop primary key;
+ALTER TABLE members
+	DROP PRIMARY KEY;
