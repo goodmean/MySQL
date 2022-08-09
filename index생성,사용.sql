@@ -52,4 +52,3 @@ select table_name, constraint_name
 
 alter table buyTbl drop foreign key buytbl_ibfk_1;
 alter table usertbl drop primary key;
-
