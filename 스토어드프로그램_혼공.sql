@@ -51,109 +51,109 @@ delimiter ;
 
 CALL ifelse_proc('오마이걸');
 
-drop procedure if exists while_proc;
+DROP PROCEDURE IF EXISTS while_proc;
 delimiter $$
-create procedure while_proc(
-	in start_num int,
-    in end_num int
+CREATE PROCEDURE while_proc(
+	IN start_num INT,
+    IN end_num INT
 )
-begin
-	declare hap int;
-    set hap = 0;
+BEGIN
+	DECLARE hap INT;
+    SET hap = 0;
     
-    while (start_num <= end_num) do
-		set hap = hap + start_num;
-        set start_num = start_num + 1;
-	end while;
-    select hap;
-end $$
+    WHILE (start_num <= end_num) DO
+		SET hap = hap + start_num;
+        SET start_num = start_num + 1;
+	END WHILE;
+    SELECT hap;
+END $$
 delimiter ;
 
-call while_proc(1, 100);
+CALL while_proc(1, 100);
 
-drop procedure if exists dynamic_proc;
+DROP PROCEDURE IF EXISTS dynamic_proc;
 delimiter $$
-create procedure dynamic_proc(
-	in tableName varchar(20)
+CREATE PROCEDURE dynamic_proc(
+	IN tableName VARCHAR(20)
 )
-begin
-	set @sqlQuery = concat('select * from ', tableName);
-    prepare myQuery from @sqlQuery;
-    execute myQuery;
-    deallocate prepare myQuery;
-end $$
+BEGIN
+	SET @sqlQuery = CONCAT('select * from ', tableName);
+    PREPARE myQuery FROM @sqlQuery;
+    EXECUTE myQuery;
+    DEALLOCATE PREPARE myQuery;
+END $$
 delimiter ;
 
-call dynamic_proc('members');
+CALL dynamic_proc('members');
 
-set global log_bin_trust_function_creators = 1;
+SET GLOBAL log_bin_trust_function_creators = 1;
 
-use market_db;
-drop function if exists sumfunc;
+USE market_db;
+DROP FUNCTION IF EXISTS sumfunc;
 delimiter $$
-create function sumFunc(number1 int, number2 int)
-	returns int
-begin
-	return number1 + number2;
-end $$
+CREATE FUNCTION sumFunc(number1 INT, number2 INT)
+	RETURNS INT
+BEGIN
+	RETURN number1 + number2;
+END $$
 delimiter ;
 
-select sumFunc(100, 200) as '합계';
+SELECT SUMFUNC(100, 200) AS '합계';
 
-drop function if exists calcYearFunc;
+DROP FUNCTION IF EXISTS calcYearFunc;
 delimiter $$
-create function calcYearFunc(dYear Int)
-	returns int
-begin
-	declare runYear int;
-    set runYear = Year(curdate()) - dYear;
-    return runYear;
-end $$
+CREATE FUNCTION calcYearFunc(dYear INT)
+	RETURNS INT
+BEGIN
+	DECLARE runYear INT;
+    SET runYear = YEAR(CURDATE()) - dYear;
+    RETURN runYear;
+END $$
 delimiter ;
 
-select calcYearFunc(2010);
+SELECT CALCYEARFUNC(2010);
 
-select calcYearFunc(2007) into @debut2007;
-select calcYearFunc(2013) into @debut2013;
-select @debut2007 - @debut2013 as '2007과 2013 차이';
+SELECT CALCYEARFUNC(2007) INTO @debut2007;
+SELECT CALCYEARFUNC(2013) INTO @debut2013;
+SELECT @debut2007 - @debut2013 AS '2007과 2013 차이';
 
-select mem_id, mem_name, calcYearFunc(year(debut_date)) as '활동 햇수'
-	from members;
+SELECT mem_id, mem_name, CALCYEARFUNC(YEAR(debut_date)) AS '활동 햇수'
+	FROM members;
 
-use market_db;
-drop procedure if exists cursorProc;
+USE market_db;
+DROP PROCEDURE IF EXISTS cursorProc;
 delimiter $$
-create procedure cursorProc()
-begin
+CREATE PROCEDURE cursorProc()
+BEGIN
 
-	declare memNumber int;
-	declare cnt int default 0;
-	declare totNumber int default 0;
-    declare endOfRow boolean default false; -- 행의 끝 여부(기본을 FALSE)
+	DECLARE memNumber INT;
+	DECLARE cnt INT DEFAULT 0;
+	DECLARE totNumber INT DEFAULT 0;
+    DECLARE endOfRow BOOLEAN DEFAULT FALSE; -- 행의 끝 여부(기본을 FALSE)
     
-    declare userCursor Cursor for -- 커서 선언
-		select mem_number from members;
+    DECLARE userCursor CURSOR FOR -- 커서 선언
+		SELECT mem_number FROM members;
         
-	declare continue handler -- 행의 끝이면 endOfRow 변수에 true를 대입
-		for not found set endOfRow = true;
+	DECLARE CONTINUE HANDLER -- 행의 끝이면 endOfRow 변수에 true를 대입
+		FOR NOT FOUND SET endOfRow = TRUE;
         
-	open userCursor;
+	OPEN userCursor;
     
-    cursor_loop: loop
-		fetch userCursor into memNumber;
+    CURSOR_LOOP: LOOP
+		FETCH userCursor INTO memNumber;
         
-        if endOfRow then
-			leave cursor_loop;
-		end if;
+        IF endOfRow THEN
+			LEAVE CURSOR_LOOP;
+		END IF;
         
-        set cnt = cnt + 1;
-        set totNumber = totNumber + memNumber;
-    end loop cursor_loop;
+        SET cnt = cnt + 1;
+        SET totNumber = totNumber + memNumber;
+    END LOOP CURSOR_LOOP;
 	
-	select (totNumber/cnt) as '회원의 평균 인원 수';
+	SELECT (totNumber/cnt) AS '회원의 평균 인원 수';
     
-    close userCursor;
-end $$
+    CLOSE userCursor;
+END $$
 delimiter ;
 
-call cursorProc();
+CALL cursorProc();
