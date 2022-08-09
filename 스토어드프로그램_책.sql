@@ -148,9 +148,6 @@ END $$
 delimiter ;
 
 CALL errorProc();
-
-SELECT routine_name, routine_definition FROM information_schema.routines
-	WHERE routine_schema = 'sqldb' AND routine_type = 'procedure';
     
 SELECT routine_name, routine_definition FROM information_schema.routines
 	WHERE routine_schema = 'sqldb' AND routine_type = 'PROCEDURE';
